@@ -53,6 +53,7 @@ ADHD PRINCIPLES:
 - **Context Switching is Costly**: Batch similar tasks (e.g., all emails) into one section.
 - **Energy is Precious**: Respect the user's energy level. Low energy = easier, shorter tasks. High energy = one (and only one) challenging task.
 - **Time is Abstract**: Provide short, concrete durations. No task should be longer than 25 minutes. Use "Pomodoro" style timings.
+- **Perfectionism Causes Paralysis**: Done is better than perfect. Emphasize "good enough" completion over flawless execution.
 
 SCHEDULING RULES
 
