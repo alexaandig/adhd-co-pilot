@@ -1,0 +1,10 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-image",
+      "description": "A calm and organized desk setup with a laptop and a notebook",
+      "imageUrl": "https://images.unsplash.com/photo-1712698137596-15ea82027b55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxvcmdhbml6ZWQlMjBkZXNrfGVufDB8fHx8MTc2ODQyNTMwMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "organized desk"
+    }
+  ]
+}
