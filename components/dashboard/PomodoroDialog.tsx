@@ -19,10 +19,11 @@ export function PomodoroDialog() {
     mode: 'focus',
   });
 
+  const isFocusModeActive = timerState.isActive && timerState.mode === 'focus';
+
   const handleOpenChange = (open: boolean) => {
-    // Prevent closing if the timer is active in focus mode
-    if (!open && timerState.isActive && timerState.mode === 'focus') {
-      return;
+    if (!open && isFocusModeActive) {
+      return; // Don't close if focus is active
     }
     setFocusedTask(null);
   };
@@ -37,7 +38,7 @@ export function PomodoroDialog() {
     setFocusedTask(null);
   }
 
-  const showCloseButton = !timerState.isActive || timerState.mode !== 'focus';
+  const showCloseButton = !isFocusModeActive;
   
   useEffect(() => {
     if (timerState.mode === 'break' && timerState.isActive) {
@@ -50,6 +51,16 @@ export function PomodoroDialog() {
       <DialogContent
         className="max-w-md"
         hideCloseButton={!showCloseButton}
+        onEscapeKeyDown={(e) => {
+          if (isFocusModeActive) {
+            e.preventDefault();
+          }
+        }}
+        onPointerDownOutside={(e) => {
+           if (isFocusModeActive) {
+            e.preventDefault();
+          }
+        }}
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl font-headline">
