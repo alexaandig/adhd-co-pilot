@@ -7,6 +7,7 @@ import { ScheduleItem } from './ScheduleItem';
 import { BrainCircuit, Lightbulb } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Progress } from '@/components/ui/progress';
+import { useMemo } from 'react';
 
 function LoadingSkeleton() {
     return (
@@ -45,6 +46,14 @@ export function ScheduleDisplay() {
   const { schedule, isLoading, progress, tasksCompleted, totalTasks } = useDashboard();
   const progressMessage = getProgressMessage(progress);
 
+  const firstUncompletedTaskId = useMemo(() => {
+    if (!schedule) return null;
+    const allTasks = schedule.flatMap(section => section.tasks);
+    const firstUncompletedTask = allTasks.find(task => !task.completed);
+    return firstUncompletedTask?.id;
+  }, [schedule]);
+
+
   return (
     <Card className="min-h-[400px]">
       <CardHeader>
@@ -80,7 +89,11 @@ export function ScheduleDisplay() {
                 </h3>
                 <div className="space-y-4">
                   {section.tasks.map((task) => (
-                    <ScheduleItem key={task.id} task={task} />
+                    <ScheduleItem 
+                      key={task.id} 
+                      task={task} 
+                      isLocked={!!firstUncompletedTaskId && task.id !== firstUncompletedTaskId && !task.completed}
+                    />
                   ))}
                 </div>
               </div>
