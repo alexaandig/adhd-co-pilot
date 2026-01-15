@@ -1,6 +1,7 @@
 'use client';
 
-import { BrainCircuit } from 'lucide-react';
+import { BrainCircuit, Flame } from 'lucide-react';
+import { StreakTracker } from './StreakTracker';
 
 export function DashboardHeader() {
   const getGreeting = () => {
@@ -16,9 +17,12 @@ export function DashboardHeader() {
         <h1 className="text-3xl font-bold font-headline">{getGreeting()}!</h1>
         <p className="text-muted-foreground">Ready to focus? Let's plan your day.</p>
       </div>
-      <div className="flex items-center gap-2">
-        <BrainCircuit className="h-6 w-6 text-primary" />
-        <span className="font-bold text-lg font-headline hidden sm:inline">ADHD Co-Pilot</span>
+      <div className="flex items-center gap-4">
+        <StreakTracker />
+        <div className="flex items-center gap-2">
+          <BrainCircuit className="h-6 w-6 text-primary" />
+          <span className="font-bold text-lg font-headline hidden sm:inline">ADHD Co-Pilot</span>
+        </div>
       </div>
     </header>
   );

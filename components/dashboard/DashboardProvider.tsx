@@ -5,6 +5,7 @@ import type { OnboardingData, ParsedSchedule, ScheduleTask } from '@/lib/types';
 import { createScheduleAction } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
 import { GenerateScheduleInput } from '@/ai/flows/ai-schedule-generator';
+import { differenceInCalendarDays, startOfWeek, isSameDay } from 'date-fns';
 
 type ConfettiType = 'rain' | 'shoot';
 
@@ -32,11 +33,24 @@ interface DashboardContextType {
   setShowCompletionDialog: (show: boolean) => void;
   focusedTask: ScheduleTask | null;
   setFocusedTask: (task: ScheduleTask | null) => void;
+  streak: number;
+  weeklyWins: { count: number; lastShown: string } | null;
+  dismissWeeklyWins: () => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
 const ONBOARDING_KEY = 'adhd-copilot-onboarding-data';
+const STREAK_KEY = 'adhd-copilot-streak-data';
+const TASK_HISTORY_KEY = 'adhd-copilot-task-history';
+const WEEKLY_WINS_KEY = 'adhd-copilot-weekly-wins';
+
+type StreakData = {
+  count: number;
+  lastCompleted: string; // ISO date string
+}
+
+type TaskHistory = string[]; // Array of ISO date strings
 
 export function DashboardProvider({ children }: { children: ReactNode }) {
   const [onboardingComplete, setOnboardingComplete] = useState(false);
@@ -55,21 +69,111 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [totalTasks, setTotalTasks] = useState(0);
   const [showCompletionDialog, setShowCompletionDialog] = useState(false);
   const [focusedTask, setFocusedTask] = useState<ScheduleTask | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [weeklyWins, setWeeklyWins] = useState<{ count: number; lastShown: string } | null>(null);
 
 
   useEffect(() => {
     try {
-      const savedData = localStorage.getItem(ONBOARDING_KEY);
-      if (savedData) {
-        const data = JSON.parse(savedData) as OnboardingData;
+      const savedOnboardingData = localStorage.getItem(ONBOARDING_KEY);
+      if (savedOnboardingData) {
+        const data = JSON.parse(savedOnboardingData) as OnboardingData;
         setOnboardingData(data);
         setOnboardingComplete(true);
       }
+      
+      const savedStreakData = localStorage.getItem(STREAK_KEY);
+      if (savedStreakData) {
+        const data = JSON.parse(savedStreakData) as StreakData;
+        const today = new Date();
+        const lastDate = new Date(data.lastCompleted);
+        if (differenceInCalendarDays(today, lastDate) <= 1) {
+          setStreak(data.count);
+        } else {
+          localStorage.removeItem(STREAK_KEY);
+        }
+      }
+
+      // Weekly Wins Logic
+      const lastWinsData = localStorage.getItem(WEEKLY_WINS_KEY);
+      const lastShownDate = lastWinsData ? new Date(JSON.parse(lastWinsData).lastShown) : new Date(0);
+      const today = new Date();
+      const startOfThisWeek = startOfWeek(today, { weekStartsOn: 1 });
+
+      if (today >= startOfThisWeek && lastShownDate < startOfThisWeek) {
+        const taskHistory: TaskHistory = JSON.parse(localStorage.getItem(TASK_HISTORY_KEY) || '[]');
+        const lastWeekStart = startOfWeek(new Date(today.setDate(today.getDate() - 7)), { weekStartsOn: 1 });
+        const lastWeekEnd = new Date(lastWeekStart);
+        lastWeekEnd.setDate(lastWeekEnd.getDate() + 6);
+        
+        const winsCount = taskHistory.filter(ts => {
+          const d = new Date(ts);
+          return d >= lastWeekStart && d <= lastWeekEnd;
+        }).length;
+        
+        if (winsCount > 0) {
+          setWeeklyWins({ count: winsCount, lastShown: startOfThisWeek.toISOString() });
+        }
+      }
+
     } catch (error) {
-      console.error('Failed to load onboarding data from localStorage', error);
+      console.error('Failed to load data from localStorage', error);
     }
     setIsMounted(true);
   }, []);
+
+  const dismissWeeklyWins = () => {
+    try {
+      const winsData = { lastShown: new Date().toISOString() };
+      localStorage.setItem(WEEKLY_WINS_KEY, JSON.stringify(winsData));
+      setWeeklyWins(null);
+    } catch (error) {
+       console.error('Failed to dismiss weekly wins', error);
+    }
+  }
+
+
+  const updateStreak = useCallback(() => {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    
+    try {
+       const savedStreakData = localStorage.getItem(STREAK_KEY);
+       let currentStreakData: StreakData = { count: 0, lastCompleted: ''};
+
+       if (savedStreakData) {
+         currentStreakData = JSON.parse(savedStreakData);
+       }
+       
+       const lastDate = currentStreakData.lastCompleted ? new Date(currentStreakData.lastCompleted) : new Date(0);
+       const daysDifference = differenceInCalendarDays(today, lastDate);
+
+       if (daysDifference > 1) {
+         currentStreakData = { count: 1, lastCompleted: todayStr };
+       } else if (daysDifference === 1) {
+         currentStreakData = { count: currentStreakData.count + 1, lastCompleted: todayStr };
+       } else if (!currentStreakData.lastCompleted) {
+         currentStreakData = { count: 1, lastCompleted: todayStr };
+       }
+       
+       localStorage.setItem(STREAK_KEY, JSON.stringify(currentStreakData));
+       setStreak(currentStreakData.count);
+
+    } catch (error) {
+      console.error("Failed to update streak in localStorage", error);
+    }
+  }, []);
+  
+  const recordTaskCompletion = useCallback(() => {
+    try {
+      const history: TaskHistory = JSON.parse(localStorage.getItem(TASK_HISTORY_KEY) || '[]');
+      history.push(new Date().toISOString());
+      localStorage.setItem(TASK_HISTORY_KEY, JSON.stringify(history));
+    } catch (error) {
+      console.error("Failed to record task completion", error);
+    }
+  }, []);
+
 
   useEffect(() => {
     if (!schedule) {
@@ -96,7 +200,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     } else {
       setProgress(0);
     }
-  }, [schedule]);
+  }, [schedule, progress]);
 
 
   const triggerConfetti = (type: ConfettiType = 'rain') => {
@@ -178,7 +282,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         )
       }));
 
-      // If we just completed the focused task, close the dialog.
       if (completed && focusedTask?.id === taskId) {
         setFocusedTask(null);
       }
@@ -188,8 +291,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
 
     if (completed) {
       triggerConfetti('rain');
+      updateStreak();
+      recordTaskCompletion();
     }
-  }, [focusedTask]);
+  }, [focusedTask, updateStreak, recordTaskCompletion]);
 
   if (!isMounted) {
     return null; // or a loading spinner
@@ -221,6 +326,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         setShowCompletionDialog,
         focusedTask,
         setFocusedTask,
+        streak,
+        weeklyWins,
+        dismissWeeklyWins,
       }}
     >
       {children}
