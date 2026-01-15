@@ -70,7 +70,7 @@ SCHEDULING RULES
 
 ## Energy & Focus Management
 
-6. **No Marathon Sessions**: Never schedule blocks longer than 90 minutes. The brain needs breaks—respect that biological limit.
+6. **No Marathon Sessions**: Never schedule blocks longer than 90 minutes. The brain needs breaks—respect that biological limit. Add a break session for around 10-15 minutes if possible. The brain need to rest.
 
 7. **Peak Energy Alignment**: Put high-focus, cognitively demanding work during the user's peak energy time (ask if you don't know—most people peak mid-morning or early afternoon).
 
