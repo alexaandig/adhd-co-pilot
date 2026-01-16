@@ -8,7 +8,6 @@ import { GenerateScheduleInput } from '@/ai/flows/ai-schedule-generator';
 import { differenceInCalendarDays, startOfWeek, isSameDay } from 'date-fns';
 
 type ConfettiType = 'rain' | 'shoot';
-export type TimerCompletionMode = 'focus' | 'break';
 
 interface DashboardContextType {
   onboardingComplete: boolean;
@@ -37,12 +36,6 @@ interface DashboardContextType {
   streak: number;
   weeklyWins: { count: number; lastShown: string } | null;
   dismissWeeklyWins: () => void;
-  showTimerCompletionDialog: boolean;
-  timerCompletionMode: TimerCompletionMode;
-  showTimerCompletion: (mode: TimerCompletionMode) => void;
-  hideTimerCompletion: () => void;
-  timerCommand: 'startBreak' | null;
-  setTimerCommand: (command: 'startBreak' | null) => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
@@ -78,9 +71,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [focusedTask, setFocusedTask] = useState<ScheduleTask | null>(null);
   const [streak, setStreak] = useState(0);
   const [weeklyWins, setWeeklyWins] = useState<{ count: number; lastShown: string } | null>(null);
-  const [showTimerCompletionDialog, setShowTimerCompletionDialog] = useState(false);
-  const [timerCompletionMode, setTimerCompletionMode] = useState<TimerCompletionMode>('focus');
-  const [timerCommand, setTimerCommand] = useState<'startBreak' | null>(null);
 
 
   useEffect(() => {
@@ -142,14 +132,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const showTimerCompletion = (mode: TimerCompletionMode) => {
-    setTimerCompletionMode(mode);
-    setShowTimerCompletionDialog(true);
-  };
-
-  const hideTimerCompletion = () => {
-    setShowTimerCompletionDialog(false);
-  };
 
   const updateStreak = useCallback(() => {
     const today = new Date();
@@ -347,12 +329,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         streak,
         weeklyWins,
         dismissWeeklyWins,
-        showTimerCompletionDialog,
-        timerCompletionMode,
-        showTimerCompletion,
-        hideTimerCompletion,
-        timerCommand,
-        setTimerCommand,
       }}
     >
       {children}
