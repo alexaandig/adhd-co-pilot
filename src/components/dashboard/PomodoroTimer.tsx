@@ -8,8 +8,8 @@ import { Play, Pause, RotateCcw, Coffee, Brain, XSquare } from 'lucide-react';
 import { useDashboard } from './DashboardProvider';
 import { cn } from '@/lib/utils';
 
-const FOCUS_TIME = 25 * 60;
-const BREAK_TIME = 5 * 60;
+const FOCUS_TIME = 1 * 60;
+const BREAK_TIME = 1 * 60;
 
 export type TimerMode = 'focus' | 'break';
 
