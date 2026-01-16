@@ -63,7 +63,7 @@ export function TaskInputForm() {
       toast({
         variant: 'destructive',
         title: 'AI Hiccup',
-        description: error.message || 'The AI failed to enhance your brain dump.',
+        description: 'The AI failed to enhance your brain dump.',
       });
     } finally {
       setIsEnhancing(false);

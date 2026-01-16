@@ -266,7 +266,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       toast({
         variant: 'destructive',
         title: 'AI Hiccup',
-        description: result.error || 'The AI failed to generate a schedule.',
+        description: 'The AI failed to generate a schedule.',
       });
     }
   };
