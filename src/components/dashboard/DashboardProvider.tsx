@@ -41,6 +41,8 @@ interface DashboardContextType {
   timerCompletionMode: TimerCompletionMode;
   showTimerCompletion: (mode: TimerCompletionMode) => void;
   hideTimerCompletion: () => void;
+  timerCommand: 'startBreak' | null;
+  setTimerCommand: (command: 'startBreak' | null) => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
@@ -78,6 +80,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [weeklyWins, setWeeklyWins] = useState<{ count: number; lastShown: string } | null>(null);
   const [showTimerCompletionDialog, setShowTimerCompletionDialog] = useState(false);
   const [timerCompletionMode, setTimerCompletionMode] = useState<TimerCompletionMode>('focus');
+  const [timerCommand, setTimerCommand] = useState<'startBreak' | null>(null);
 
 
   useEffect(() => {
@@ -348,6 +351,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         timerCompletionMode,
         showTimerCompletion,
         hideTimerCompletion,
+        timerCommand,
+        setTimerCommand,
       }}
     >
       {children}

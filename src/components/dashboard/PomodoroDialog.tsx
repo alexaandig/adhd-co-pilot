@@ -13,17 +13,17 @@ import { useDashboard } from './DashboardProvider';
 import { Brain } from 'lucide-react';
 
 export function PomodoroDialog() {
-  const { focusedTask, setFocusedTask, updateTaskCompletion } = useDashboard();
+  const { focusedTask, setFocusedTask, updateTaskCompletion, timerCommand, setTimerCommand } = useDashboard();
   const [timerState, setTimerState] = useState<TimerState>({
     isActive: false,
     mode: 'focus',
   });
 
-  const isFocusModeActive = timerState.isActive && timerState.mode === 'focus';
+  const isSessionActive = timerState.isActive;
 
   const handleOpenChange = (open: boolean) => {
-    if (!open && isFocusModeActive) {
-      return; // Don't close if focus is active
+    if (!open && isSessionActive) {
+      return; // Don't close if a session is active
     }
     setFocusedTask(null);
   };
@@ -38,13 +38,7 @@ export function PomodoroDialog() {
     setFocusedTask(null);
   }
 
-  const showCloseButton = !isFocusModeActive;
-  
-  useEffect(() => {
-    if (timerState.mode === 'break' && timerState.isActive) {
-      // If break starts, allow closing, but don't force it open
-    }
-  }, [timerState])
+  const showCloseButton = !isSessionActive;
 
   return (
     <Dialog open={!!focusedTask} onOpenChange={handleOpenChange}>
@@ -52,12 +46,12 @@ export function PomodoroDialog() {
         className="max-w-md"
         hideCloseButton={!showCloseButton}
         onEscapeKeyDown={(e) => {
-          if (isFocusModeActive) {
+          if (isSessionActive) {
             e.preventDefault();
           }
         }}
         onPointerDownOutside={(e) => {
-           if (isFocusModeActive) {
+           if (isSessionActive) {
             e.preventDefault();
           }
         }}
@@ -79,6 +73,8 @@ export function PomodoroDialog() {
             onComplete={handleComplete}
             onStateChange={setTimerState}
             onEndSession={handleEndSession}
+            timerCommand={timerCommand}
+            onCommandConsumed={() => setTimerCommand(null)}
            />
         </div>
       </DialogContent>

@@ -8,8 +8,8 @@ import { Play, Pause, RotateCcw, Coffee, Brain, XSquare } from 'lucide-react';
 import { useDashboard } from './DashboardProvider';
 import { cn } from '@/lib/utils';
 
-const FOCUS_TIME = 1 * 60;
-const BREAK_TIME = 1 * 60;
+const FOCUS_TIME = 25 * 60;
+const BREAK_TIME = 5 * 60;
 
 export type TimerMode = 'focus' | 'break';
 
@@ -22,10 +22,14 @@ export function PomodoroTimer({
   onComplete,
   onStateChange,
   onEndSession,
+  timerCommand,
+  onCommandConsumed,
 }: {
   onComplete: () => void;
   onStateChange: (state: TimerState) => void;
   onEndSession: () => void;
+  timerCommand: 'startBreak' | null;
+  onCommandConsumed: () => void;
 }) {
   const [mode, setMode] = useState<TimerMode>('focus');
   const [isActive, setIsActive] = useState(false);
@@ -38,6 +42,17 @@ export function PomodoroTimer({
 
   const secondsLeft = mode === 'focus' ? focusTimeLeft : breakTimeLeft;
   const setSecondsLeft = mode === 'focus' ? setFocusTimeLeft : setBreakTimeLeft;
+
+  useEffect(() => {
+    if (timerCommand === 'startBreak') {
+        if (mode !== 'break') {
+            setMode('break');
+            setIsActive(true);
+            setBreakTimeLeft(BREAK_TIME);
+        }
+        onCommandConsumed();
+    }
+  }, [timerCommand, onCommandConsumed, mode]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
