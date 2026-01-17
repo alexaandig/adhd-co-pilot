@@ -26,24 +26,25 @@ export function ScheduleItem({ task, isLocked }: { task: ScheduleTask, isLocked:
     )}>
       <div className="flex items-start space-x-4">
         <Checkbox
-        id={task.id}
-        checked={task.completed}
-        onCheckedChange={handleCheckedChange}
-        className={cn(
-          "mt-1 h-5 w-5",
-          isLocked && "cursor-not-allowed opacity-50"
-        )}
-        disabled={isLocked}
-      />
+          id={task.id}
+          checked={task.completed}
+          onCheckedChange={handleCheckedChange}
+          className={cn(
+              "mt-1 h-5 w-5 leading-none peer-disabled:cursor-not-allowed",
+              task.completed && "line-through text-muted-foreground",
+              isTimerOpen && "text-primary font-bold",
+              isLocked ? "text-muted-foreground peer-disabled:opacity-100" : "peer-disabled:opacity-70"
+            )}
+          disabled={isTimerOpen || isLocked}
+        />
         <div className="flex-1 space-y-2">
           <label
             htmlFor={task.id}
             className={cn(
-              "font-medium text-lg leading-none",
+              "font-medium text-lg leading-none peer-disabled:cursor-not-allowed",
               task.completed && "line-through text-muted-foreground",
               isTimerOpen && "text-primary font-bold",
-              (isTimerOpen || isLocked) && "cursor-not-allowed",
-              isLocked ? "text-muted-foreground" : ""
+              isLocked ? "text-muted-foreground peer-disabled:opacity-100" : "peer-disabled:opacity-70"
             )}
           >
             {isLocked && <Lock className="inline-block h-4 w-4 mr-2" />}
