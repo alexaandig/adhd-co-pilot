@@ -36,6 +36,9 @@ interface DashboardContextType {
   streak: number;
   weeklyWins: { count: number; lastShown: string } | null;
   dismissWeeklyWins: () => void;
+  isBrainDumpForceUnlocked: boolean;
+  setBrainDumpForceUnlocked: (unlocked: boolean) => void;
+  resetForNextSession: () => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
@@ -71,6 +74,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [focusedTask, setFocusedTask] = useState<ScheduleTask | null>(null);
   const [streak, setStreak] = useState(0);
   const [weeklyWins, setWeeklyWins] = useState<{ count: number; lastShown: string } | null>(null);
+  const [isBrainDumpForceUnlocked, setBrainDumpForceUnlocked] = useState(false);
 
 
   useEffect(() => {
@@ -131,6 +135,12 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
        console.error('Failed to dismiss weekly wins', error);
     }
   }
+
+  const resetForNextSession = useCallback(() => {
+    setBrainDumpForceUnlocked(true);
+    setTasks('');
+    setSchedule(null);
+  }, []);
 
 
   const updateStreak = useCallback(() => {
@@ -248,6 +258,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
 
     setIsLoading(true);
     setSchedule(null);
+    setBrainDumpForceUnlocked(false);
 
     const input: GenerateScheduleInput = {
       tasks,
@@ -329,6 +340,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         streak,
         weeklyWins,
         dismissWeeklyWins,
+        isBrainDumpForceUnlocked,
+        setBrainDumpForceUnlocked,
+        resetForNextSession,
       }}
     >
       {children}
