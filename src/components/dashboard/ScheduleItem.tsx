@@ -29,12 +29,7 @@ export function ScheduleItem({ task, isLocked }: { task: ScheduleTask, isLocked:
           id={task.id}
           checked={task.completed}
           onCheckedChange={handleCheckedChange}
-          className={cn(
-              "mt-1 h-5 w-5 leading-none peer-disabled:cursor-not-allowed",
-              task.completed && "line-through text-muted-foreground",
-              isTimerOpen && "text-primary font-bold",
-              isLocked ? "text-muted-foreground peer-disabled:opacity-100" : "peer-disabled:opacity-70"
-            )}
+          className="mt-1 h-5 w-5"
           disabled={isTimerOpen || isLocked}
         />
         <div className="flex-1 space-y-2">
