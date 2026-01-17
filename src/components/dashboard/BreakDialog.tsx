@@ -16,7 +16,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Coffee, Play, RotateCcw } from 'lucide-react';
 
-const breakOptions = [5, 10, 15, 25]; // in minutes
+const breakOptions = [5, 10, 15, 25, 30, 45, 60]; // in minutes
 
 export function BreakDialog() {
   const { isBreakDialogOpen, setBreakDialogOpen } = useDashboard();
