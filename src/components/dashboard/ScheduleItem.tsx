@@ -33,7 +33,7 @@ export function ScheduleItem({ task, isLocked }: { task: ScheduleTask, isLocked:
           "mt-1 h-5 w-5",
           isLocked && "cursor-not-allowed opacity-50"
         )}
-        disabled={isTimerOpen || isLocked}
+        disabled={isLocked}
       />
         <div className="flex-1 space-y-2">
           <label
