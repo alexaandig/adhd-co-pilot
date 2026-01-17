@@ -133,8 +133,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (isBreakPending) {
-      setBreakDialogOpen(true);
-      setIsBreakPending(false);
+      // Use a timeout to allow the previous dialog to fully close before opening the new one.
+      // This prevents an issue where Radix UI leaves `pointer-events: none` on the body.
+      const timer = setTimeout(() => {
+        setBreakDialogOpen(true);
+        setIsBreakPending(false);
+      }, 150);
+      return () => clearTimeout(timer);
     }
   }, [isBreakPending]);
 
