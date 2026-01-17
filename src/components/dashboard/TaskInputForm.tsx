@@ -59,6 +59,7 @@ export function TaskInputForm() {
     totalTasks,
     isBrainDumpForceUnlocked,
     resetForNextSession,
+    resetTasks,
   } = useDashboard();
   
   const { handleSubmit } = useForm();
@@ -202,7 +203,7 @@ export function TaskInputForm() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>I'll Take a Break</AlertDialogCancel>
+            <AlertDialogCancel onClick={resetTasks}>I'll Take a Break</AlertDialogCancel>
             <AlertDialogAction onClick={resetForNextSession}>
               Continue Anyway
             </AlertDialogAction>

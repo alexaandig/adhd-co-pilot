@@ -39,6 +39,7 @@ interface DashboardContextType {
   isBrainDumpForceUnlocked: boolean;
   setBrainDumpForceUnlocked: (unlocked: boolean) => void;
   resetForNextSession: () => void;
+  resetTasks: () => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
@@ -138,6 +139,11 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
 
   const resetForNextSession = useCallback(() => {
     setBrainDumpForceUnlocked(true);
+    setTasks('');
+    setSchedule(null);
+  }, []);
+
+  const resetTasks = useCallback(() => {
     setTasks('');
     setSchedule(null);
   }, []);
@@ -343,6 +349,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         isBrainDumpForceUnlocked,
         setBrainDumpForceUnlocked,
         resetForNextSession,
+        resetTasks,
       }}
     >
       {children}
