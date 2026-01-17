@@ -22,7 +22,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
-const energyEmojis = ['😩', '😫', '😟', '😕', '😐', '🙂', '😊', '😁', '🤩', '🚀'];
+const energyEmojis = ['😩Exhausted', '😫Confounded', '😟Worried', '😕Confused', '😐Neutral', '🙂Slightly Happy', '😊Happy', '😁Beaming', '🤩Excited', '🚀Energetic'];
 
 export function TaskInputForm() {
   const {
