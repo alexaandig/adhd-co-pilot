@@ -24,11 +24,11 @@ import { cn } from '@/lib/utils';
 
 const energyEmojis = [
   '😩<br/>Exhausted', 
-  '😫<br/>Confounded', 
+  '😫<br/>Tired'', 
   '😟<br/>Worried', 
   '😕<br/>Confused', 
   '😐<br/>Neutral', 
-  '🙂<br/>Slightly Happy', 
+  '🙂<br/>Calm', 
   '😊<br/>Happy', 
   '😁<br/>Beaming', 
   '🤩<br/>Excited', 
