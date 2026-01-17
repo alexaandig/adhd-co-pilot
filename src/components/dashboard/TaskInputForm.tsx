@@ -133,7 +133,10 @@ export function TaskInputForm() {
                 onValueChange={(value) => setEnergyLevel(value[0])}
                 disabled={isLoading}
               />
-              <span className="text-xl text-center">{energyEmojis[energyLevel - 1]}</span>
+              <span 
+                className="text-xl text-center min-w-[80px]" 
+                dangerouslySetInnerHTML={{__html: energyEmojis[energyLevel - 1]}}
+              />
             </div>
           </div>
           <div className="space-y-2">
