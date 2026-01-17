@@ -202,7 +202,7 @@ export function TaskInputForm() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>I'll Take a Break</AlertDialogCancel>
+            <AlertDialogCancel onClick={resetForNextSession}>I'll Take a Break</AlertDialogCancel>
             <AlertDialogAction onClick={resetForNextSession}>
               Continue Anyway
             </AlertDialogAction>
