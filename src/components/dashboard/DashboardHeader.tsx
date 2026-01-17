@@ -2,19 +2,26 @@
 
 import { BrainCircuit, Flame } from 'lucide-react';
 import { StreakTracker } from './StreakTracker';
+import { useState, useEffect } from 'react';
 
 export function DashboardHeader() {
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good morning';
-    if (hour < 18) return 'Good afternoon';
-    return 'Good evening';
-  };
+  const [greeting, setGreeting] = useState('');
+
+  useEffect(() => {
+    const getGreeting = () => {
+      const hour = new Date().getHours();
+      if (hour < 12) return 'Good morning';
+      if (hour < 18) return 'Good afternoon';
+      return 'Good evening';
+    };
+    setGreeting(getGreeting());
+  }, []);
+
 
   return (
     <header className="flex items-center justify-between">
       <div>
-        <h1 className="text-3xl font-bold font-headline">{getGreeting()}!</h1>
+        <h1 className="text-3xl font-bold font-headline">{greeting ? `${greeting}!` : '\u00A0'}</h1>
         <p className="text-muted-foreground">Ready to focus? Let's plan your day.</p>
       </div>
       <div className="flex items-center gap-4">
