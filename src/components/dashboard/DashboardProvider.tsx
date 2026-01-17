@@ -39,6 +39,9 @@ interface DashboardContextType {
   isBrainDumpForceUnlocked: boolean;
   setBrainDumpForceUnlocked: (unlocked: boolean) => void;
   resetForNextSession: () => void;
+  isBreakDialogOpen: boolean;
+  setBreakDialogOpen: (open: boolean) => void;
+  startBreak: () => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
@@ -75,6 +78,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [streak, setStreak] = useState(0);
   const [weeklyWins, setWeeklyWins] = useState<{ count: number; lastShown: string } | null>(null);
   const [isBrainDumpForceUnlocked, setBrainDumpForceUnlocked] = useState(false);
+  const [isBreakDialogOpen, setBreakDialogOpen] = useState(false);
 
 
   useEffect(() => {
@@ -141,6 +145,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     setTasks('');
     setSchedule(null);
   }, []);
+
+  const startBreak = () => {
+    setTasks('');
+    setSchedule(null);
+    setBreakDialogOpen(true);
+  };
+
 
   const updateStreak = useCallback(() => {
     const today = new Date();
@@ -342,6 +353,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         isBrainDumpForceUnlocked,
         setBrainDumpForceUnlocked,
         resetForNextSession,
+        isBreakDialogOpen,
+        setBreakDialogOpen,
+        startBreak,
       }}
     >
       {children}

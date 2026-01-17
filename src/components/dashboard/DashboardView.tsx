@@ -7,6 +7,7 @@ import { FullScreenConfetti } from './FullScreenConfetti';
 import { CompletionDialog } from './CompletionDialog';
 import { PomodoroDialog } from './PomodoroDialog';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { BreakDialog } from './BreakDialog';
 
 export function DashboardView() {
   const { onboardingComplete } = useDashboard();
@@ -18,6 +19,7 @@ export function DashboardView() {
         {onboardingComplete ? <DashboardLayout /> : <Onboarding />}
         <CompletionDialog />
         <PomodoroDialog />
+        <BreakDialog />
       </TooltipProvider>
     </main>
   );
