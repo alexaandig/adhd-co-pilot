@@ -12,7 +12,7 @@ import {
 import { useDashboard } from "./DashboardProvider";
 
 export function CompletionDialog() {
-  const { showCompletionDialog, setShowCompletionDialog } = useDashboard();
+  const { showCompletionDialog, setShowCompletionDialog, resetForNextSession } = useDashboard();
 
   return (
     <AlertDialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
@@ -25,7 +25,7 @@ export function CompletionDialog() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction>Close</AlertDialogAction>
+          <AlertDialogAction onClick={resetForNextSession}>Close</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
