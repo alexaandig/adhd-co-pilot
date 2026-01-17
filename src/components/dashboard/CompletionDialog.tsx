@@ -25,7 +25,7 @@ export function CompletionDialog() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={resetTasks}>Close</AlertDialogAction>
+          <AlertDialogAction>Close</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
