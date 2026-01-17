@@ -16,13 +16,14 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Coffee, Play, RotateCcw } from 'lucide-react';
 
-const breakOptions = [5, 10, 15, 25, 30, 45, 60]; // in minutes
+const breakOptions = [1, 5, 10, 15, 25]; // in minutes
 
 export function BreakDialog() {
   const { isBreakDialogOpen, setBreakDialogOpen } = useDashboard();
   const [selectedDuration, setSelectedDuration] = useState(5); // in minutes
   const [timeLeft, setTimeLeft] = useState(selectedDuration * 60); // in seconds
   const [isActive, setIsActive] = useState(false);
+  const [isBreakOver, setIsBreakOver] = useState(false);
 
   const totalSeconds = useMemo(() => selectedDuration * 60, [selectedDuration]);
 
@@ -30,6 +31,7 @@ export function BreakDialog() {
     if (!isBreakDialogOpen) {
       setIsActive(false);
       setTimeLeft(selectedDuration * 60);
+      setIsBreakOver(false);
     }
   }, [isBreakDialogOpen, selectedDuration]);
 
@@ -42,7 +44,7 @@ export function BreakDialog() {
       }, 1000);
     } else if (isActive && timeLeft === 0) {
       setIsActive(false);
-      setBreakDialogOpen(false);
+      setIsBreakOver(true);
       // Optional: play a sound
     }
 
@@ -51,17 +53,22 @@ export function BreakDialog() {
         clearInterval(interval);
       }
     };
-  }, [isActive, timeLeft, setBreakDialogOpen]);
+  }, [isActive, timeLeft]);
 
   const handleStart = () => {
     setTimeLeft(selectedDuration * 60);
     setIsActive(true);
+    setIsBreakOver(false);
   };
 
   const handleReset = () => {
     setIsActive(false);
     setTimeLeft(selectedDuration * 60);
-  }
+  };
+
+  const handleClose = () => {
+    setBreakDialogOpen(false);
+  };
 
   const percentage = (timeLeft / totalSeconds) * 100;
   const minutes = Math.floor(timeLeft / 60);
@@ -70,26 +77,28 @@ export function BreakDialog() {
   return (
     <Dialog open={isBreakDialogOpen} onOpenChange={setBreakDialogOpen}>
       <DialogContent
-        hideCloseButton={isActive}
+        hideCloseButton={isActive || isBreakOver}
         onEscapeKeyDown={(e) => {
-          if (isActive) e.preventDefault();
+          if (isActive || isBreakOver) e.preventDefault();
         }}
         onPointerDownOutside={(e) => {
-          if (isActive) e.preventDefault();
+          if (isActive || isBreakOver) e.preventDefault();
         }}
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl font-headline">
             <Coffee className="h-6 w-6 text-primary" />
-            Time for a Break
+            {isBreakOver ? "Break's Over!" : 'Time for a Break'}
           </DialogTitle>
           <DialogDescription>
-            Rest is productive. Choose your break duration and relax.
+            {isBreakOver
+              ? "You've had a good rest. Ready to get back to it?"
+              : 'Rest is productive. Choose your break duration and relax.'}
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col items-center gap-6 pt-4">
-          {!isActive ? (
+          {!isActive && !isBreakOver ? (
             <>
               <RadioGroup
                 value={String(selectedDuration)}
@@ -107,7 +116,7 @@ export function BreakDialog() {
                 <Play className="mr-2 h-4 w-4" /> Start Break
               </Button>
             </>
-          ) : (
+          ) : isActive ? (
             <>
               <div className="w-48 h-48">
                 <CircularProgressbar
@@ -124,6 +133,10 @@ export function BreakDialog() {
                 <RotateCcw className="mr-2 h-4 w-4" /> Reset Break
               </Button>
             </>
+          ) : (
+            <Button onClick={handleClose} size="lg" className="w-full">
+              I'm Ready!
+            </Button>
           )}
         </div>
       </DialogContent>
