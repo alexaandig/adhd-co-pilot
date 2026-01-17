@@ -20,8 +20,8 @@ export function ScheduleItem({ task, isLocked }: { task: ScheduleTask, isLocked:
 
   return (
     <div className={cn(
-        "bg-card border rounded-lg transition-all relative overflow-hidden p-4", 
-        task.completed && "bg-accent/50 border-primary/30 blur-sm",
+        "bg-accent/50 border rounded-lg transition-all relative overflow-hidden p-4", 
+        task.completed && "border-primary/30 blur-sm",
         isLocked && "bg-muted/50 border-dashed opacity-70 blur-sm"
     )}>
       <div className="flex items-start space-x-4">
