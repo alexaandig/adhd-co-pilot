@@ -79,6 +79,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [weeklyWins, setWeeklyWins] = useState<{ count: number; lastShown: string } | null>(null);
   const [isBrainDumpForceUnlocked, setBrainDumpForceUnlocked] = useState(false);
   const [isBreakDialogOpen, setBreakDialogOpen] = useState(false);
+  const [isBreakPending, setIsBreakPending] = useState(false);
 
 
   useEffect(() => {
@@ -130,6 +131,14 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (isBreakPending) {
+      setBreakDialogOpen(true);
+      setIsBreakPending(false);
+    }
+  }, [isBreakPending]);
+
+
   const dismissWeeklyWins = () => {
     try {
       const winsData = { lastShown: new Date().toISOString() };
@@ -147,9 +156,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const startBreak = () => {
+    setBrainDumpForceUnlocked(true);
     setTasks('');
     setSchedule(null);
-    setBreakDialogOpen(true);
+    setIsBreakPending(true);
   };
 
 
