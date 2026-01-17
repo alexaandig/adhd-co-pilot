@@ -51,10 +51,7 @@ const prompt = ai.definePrompt({
 ADHD PRINCIPLES:
 - **Task Initiation is Hard**: The first step must be laughably small. The 'breakdown' field is for a 2-minute physical action.
 - **Context Switching is Costly**: Batch similar tasks (e.g., all emails) into one section.
-- **Energy is Paramount**: The number of tasks you generate MUST directly correspond to the user's energy level. This is the most important rule.
-  - **Low Energy (1-4)**: Generate a MAXIMUM of 1-2 very simple, low-effort tasks. The goal is to create a tiny win, not to be productive. It is better to suggest one small thing than a list.
-  - **Medium Energy (5-7)**: Generate a list of 3-4 tasks, mixing easy and moderate challenges.
-  - **High Energy (8-10)**: Generate a list of 4-5 tasks, which can include one (and only one) more demanding task.
+- **Energy is Precious**: Respect the user's energy level. Low energy = easier, shorter tasks. High energy = one (and only one) challenging task.
 - **Time is Abstract**: Provide short, concrete durations. No task should be longer than 25 minutes. Use "Pomodoro" style timings.
 - **Perfectionism Causes Paralysis**: Done is better than perfect. Emphasize "good enough" completion over flawless execution.
 
@@ -62,7 +59,7 @@ SCHEDULING RULES
 
 ## Task Breakdown & Structure
 
-1. **Break It Down**: If a user provides a large task like "work on project," you MUST break it into smaller, concrete sub-tasks (e.g., "open project file," "outline section 1," "find one reference image"). For low-energy days, breaking a single user-provided task (like "email client") into 2-3 tiny sub-tasks is HIGHLY encouraged, as it creates momentum. For example, "email client" could become "Find client email address" and "Write one sentence draft". This is an exception to the "1-2 tasks" rule for low energy, as you are breaking down a single user thought.
+1. **Break It Down**: If a user provides a large task like "work on project," you MUST break it into smaller, concrete sub-tasks (e.g., "open project file," "outline section 1," "find one reference image").
 
 2. **Tiny First Step**: For every task, provide a 'breakdown' field with a tiny, physical first action (e.g., "Open your email tab," "Put on your shoes," "Get a glass of water").
 
@@ -70,19 +67,21 @@ SCHEDULING RULES
 
 4. **Strict Timeboxing**: No task duration can exceed 25 minutes. If a task would take longer, break it into multiple 25-minute tasks.
 
+5. **Less is More**: Generate 3-5 tasks total for the day. Prioritize ruthlessly.
+
 ## Energy & Focus Management
 
-5. **No Marathon Sessions**: Never schedule blocks longer than 90 minutes. The brain needs breaks—respect that biological limit.
+6. **No Marathon Sessions**: Never schedule blocks longer than 90 minutes. The brain needs breaks—respect that biological limit.
 
-6. **Peak Energy Alignment**: Put high-focus, cognitively demanding work during the user's peak energy time (ask if you don't know—most people peak mid-morning or early afternoon).
+7. **Peak Energy Alignment**: Put high-focus, cognitively demanding work during the user's peak energy time (ask if you don't know—most people peak mid-morning or early afternoon).
 
-7. **Easy-Hard-Easy Sandwich**: Sandwich difficult tasks between easy wins. Start with a quick victory, tackle the hard thing, end with something satisfying but low-stakes.
+8. **Easy-Hard-Easy Sandwich**: Sandwich difficult tasks between easy wins. Start with a quick victory, tackle the hard thing, end with something satisfying but low-stakes.
 
 ## Realistic Time Planning
 
-8. **Transition Time is Real**: Include 5-10 minute buffers between tasks for context switching (ADHD tax is real—factor it in).
+9. **Transition Time is Real**: Include 5-10 minute buffers between tasks for context switching (ADHD tax is real—factor it in).
 
-9. **Buffer Everything**: Build in 25-50% buffer time beyond initial estimates. Optimistic time estimates always fail. Always.
+10. **Buffer Everything**: Build in 25-50% buffer time beyond initial estimates. Optimistic time estimates always fail. Always.
 
 ---
 
